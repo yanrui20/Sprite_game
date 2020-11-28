@@ -1,18 +1,14 @@
-//
-// Created by asus on 20/11/28.
-//
-
 #include "sprite_usr.h"
 
-sprite_usr::sprite_usr(int p_x, int p_y, ACL_Image *p_img, int width, int height, int speed)
-    : sprite_base(p_x, p_y, p_img, width, height, 0, 0) {
+sprite_usr::sprite_usr(int p_x, int p_y, ACL_Image *p_img, int width, int height, int mov_x, int mov_y)
+    : sprite_base(p_x, p_y, p_img, width, height, mov_x, mov_y) {
     score = 0;
 }
 
 sprite_usr::~sprite_usr() = default;
 
 void sprite_usr::move() {
-
+    
 }
 
 void sprite_usr::move(int key) {
@@ -38,6 +34,10 @@ void sprite_usr::move(int key) {
     }
 }
 
-int sprite_usr::get_score() const {
+int sprite_usr::get_score() {
     return score;
+}
+
+void sprite_usr::add_score(int add) {
+    score += add;
 }

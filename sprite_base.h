@@ -13,7 +13,11 @@ public:
     sprite_base(int p_x, int p_y, ACL_Image *p_img, int width, int height, int mov_x, int mov_y);
     virtual ~sprite_base();
     virtual void move() = 0;
-    void drawSprite(int pic_width, int pic_height);
+    void drawSprite(int pic_width = -1, int pic_height = -1);
+    int get_pos_x() const;
+    int get_pos_y() const;
+    virtual int get_score() = 0;
+    bool is_inBox();
 };
 
 
