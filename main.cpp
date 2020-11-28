@@ -1,11 +1,13 @@
 #include <iostream>
-#include "acllib.h"
+#include "global.h"
 
 int Setup() {
-    initWindow("My Window", DEFAULT, DEFAULT, 640, 480);
+    initWindow("Sprite Game", DEFAULT, DEFAULT, WINDOW_WIDTH, WINDOW_HEIGHT);
+    loadImage("../picture/tom.bmp", &usr_img);
+    loadImage("../picture/jerry.bmp", &low_img);
     beginPaint();
-    setTextSize(100);
-    paintText(100, 100, "Hi~");
+    clearDevice();
+    putImage(&usr_img, 50, 50);
     endPaint();
     return 0;
 }
