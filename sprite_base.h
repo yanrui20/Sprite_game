@@ -18,6 +18,7 @@ public:
     int get_pos_y() const;
     virtual int get_score() = 0;
     bool is_inBox();
+    bool touch(const sprite_base *sprite) const;
 };
 
 

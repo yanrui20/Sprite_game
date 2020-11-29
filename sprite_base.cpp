@@ -35,3 +35,14 @@ bool sprite_base::is_inBox() {
     else
         return true;
 }
+
+bool sprite_base::touch(const sprite_base *sprite) const {
+    int xu = sprite->get_pos_x();
+    int yu = sprite->get_pos_y();
+    if ((pos_x >= xu && pos_x <= xu + PIC_SIZE && pos_y >= yu && pos_y <= yu + PIC_SIZE) || \
+        (pos_x >= xu && pos_x <= xu + PIC_SIZE && pos_y + PIC_SIZE >= yu && pos_y <= yu) || \
+        (pos_x + PIC_SIZE >= xu && pos_x <= xu && pos_y >= yu && pos_y <= yu + PIC_SIZE) || \
+        (pos_x + PIC_SIZE >= xu && pos_x <= xu && pos_y + PIC_SIZE >= yu && pos_y <= yu) )
+        return true; // left_up, left_down, right_up, right_down
+    return false;
+}

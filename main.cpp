@@ -7,7 +7,6 @@
 void timerEvent(int id);
 void keyboardEvent(int key, int event);
 void eat();
-bool touch(const sprite_low * low);
 void print();
 void create_usr();
 void create_low(sprite_low ** low);
@@ -50,25 +49,12 @@ void keyboardEvent(int key, int event) {
 
 void eat() {
     for (auto & low : spriteLow) {
-        if (low && touch(low)) {
+        if (low && low->touch(spriteUsr)) {
             spriteUsr->add_score(low->get_score());
             delete low;
             low = nullptr;
         }
     }
-}
-
-bool touch(const sprite_low * low) {
-    int xl = low->get_pos_x();
-    int yl = low->get_pos_y();
-    int xu = spriteUsr->get_pos_x();
-    int yu = spriteUsr->get_pos_y();
-    if ((xl >= xu && xl <= xu + PIC_SIZE && yl >= yu && yl <= yu + PIC_SIZE) || \
-        (xl >= xu && xl <= xu + PIC_SIZE && yl + PIC_SIZE >= yu && yl <= yu) || \
-        (xl + PIC_SIZE >= xu && xl <= xu && yl >= yu && yl <= yu + PIC_SIZE) || \
-        (xl + PIC_SIZE >= xu && xl <= xu && yl + PIC_SIZE >= yu && yl <= yu) )
-        return true; // left_up, left_down, right_up, right_down
-    return false;
 }
 
 void print() {
