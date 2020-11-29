@@ -7,7 +7,7 @@ sprite_usr::sprite_usr(int p_x, int p_y, ACL_Image *p_img, int width, int height
 
 sprite_usr::~sprite_usr() = default;
 
-void sprite_usr::move() {
+void sprite_usr::auto_move() {
     
 }
 

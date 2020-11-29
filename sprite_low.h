@@ -10,7 +10,7 @@ private:
 public:
     sprite_low(int p_x, int p_y, ACL_Image *p_img, int width, int height, int mov_x, int mov_y);
     ~sprite_low() override;
-    void move() override;
+    void auto_move() override;
     int get_score() override;
 };
 

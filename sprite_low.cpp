@@ -9,7 +9,7 @@ sprite_low::sprite_low(int p_x, int p_y, ACL_Image *p_img, \
 
 sprite_low::~sprite_low() = default;
 
-void sprite_low::move() {
+void sprite_low::auto_move() {
     pos_x += mov_x;
     pos_y += mov_y;
 }

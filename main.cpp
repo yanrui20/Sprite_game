@@ -32,7 +32,7 @@ int Setup() {
 void timerEvent(int id){
     eat();
     for(auto & low : spriteLow) {
-        if(low) low->move();
+        if(low) low->auto_move();
         else create_low(&low);
         if (!(low->is_inBox())) {
             delete low;
