@@ -11,10 +11,15 @@ const int PIC_SIZE = 50;
 const int LOW_SCORE = 1;
 const int LOW_SPEED = 2;
 // usr
-const int USR_SPEED = 20;
+const int USR_SPEED = 40;
 const int USR_BLOOD = 10;
-// bomb
-const int BOMB_SPEED_EVERY_LEVEL = 5;
-const int BOMB_BLOOD = -1;
-const int MAX_BOMB = 10;
+// blood
+const int SPEED_EVERY_LEVEL = 5;
+    // bomb
+    const int BOMB_BLOOD = -1;
+    const int MAX_BOMB = 10;
+    // heart
+    const int MAX_HEART = 3;
+    const int HEART_BLOOD = 1;
+
 #endif //SPRITE_GAME_GLOBAL_H

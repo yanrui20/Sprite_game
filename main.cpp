@@ -1,10 +1,9 @@
 #include <iostream>
 #include "global.h"
 #include <ctime>
-// #include <zconf.h>
 #include "sprite_low.h"
 #include "sprite_usr.h"
-#include "sprite_bomb.h"
+#include "sprite_blood.h"
 
 void timerEvent(int id);
 void keyboardEvent(int key, int event);
@@ -12,13 +11,14 @@ void eat();
 void print();
 void create_usr();
 void create_low(sprite_low ** low);
-void create_bomb(sprite_bomb ** bomb);
+void create_blood(sprite_blood **pSpriteBlood, ACL_Image *p_img, int blood);
 
-ACL_Image usr_img, low_img, bomb_img, game_over_img;
+ACL_Image usr_img, low_img, bomb_img, game_over_img, heart_img;
 const int MAX_LOW = 20;
 sprite_low * spriteLow[MAX_LOW] = {nullptr};
 sprite_usr * spriteUsr = nullptr;
-sprite_bomb * spriteBomb[MAX_BOMB] = {nullptr};
+sprite_blood * spriteBomb[MAX_BOMB] = {nullptr};
+sprite_blood * spriteHeart[MAX_HEART] = {nullptr};
 bool game_over = false;
 int level = 1;
 
@@ -28,6 +28,7 @@ int Setup() {
     loadImage("../picture/jerry.bmp", &low_img);
     loadImage("../picture/bomb.jpg", &bomb_img);
     loadImage("../picture/GAME_OVER.jpg", &game_over_img);
+    loadImage("../picture/heart.jpg", &heart_img);
     srand(time(nullptr));
     create_usr();
     registerTimerEvent(timerEvent);
@@ -51,10 +52,20 @@ void timerEvent(int id){
     }
     for(auto & bomb : spriteBomb) {
         if(bomb) bomb->auto_move();
-        else create_bomb(&bomb);
+        else create_blood(&bomb, &bomb_img, BOMB_BLOOD);
         if (!(bomb->is_inBox())) {
             delete bomb;
             bomb = nullptr;
+        }
+    }
+    if (level >= 2) {
+        for(auto & heart : spriteHeart) {
+            if(heart) heart->auto_move();
+            else create_blood(&heart, &heart_img, HEART_BLOOD);
+            if (!(heart->is_inBox())) {
+                delete heart;
+                heart = nullptr;
+            }
         }
     }
     print();
@@ -62,6 +73,7 @@ void timerEvent(int id){
 
 void keyboardEvent(int key, int event) {
     if(event != KEY_DOWN) return;
+
     spriteUsr->move(key);
 }
 
@@ -75,9 +87,18 @@ void eat() {
     }
     for (auto & bomb : spriteBomb) {
         if (bomb && bomb->touch(spriteUsr)) {
-            spriteUsr->add_blood(BOMB_BLOOD);
+            spriteUsr->add_blood(bomb->get_score());
             delete bomb;
             bomb = nullptr;
+        }
+    }
+    for (auto & heart : spriteHeart) {
+        if (heart && heart->touch(spriteUsr)) {
+            if (spriteUsr->get_blood() < USR_BLOOD) {
+                spriteUsr->add_blood(heart->get_score());
+            }
+            delete heart;
+            heart = nullptr;
         }
     }
 }
@@ -96,6 +117,10 @@ void print() {
     for (auto & bomb : spriteBomb) {
         if (bomb)
             bomb->drawSprite();
+    }
+    for (auto & heart : spriteHeart) {
+        if (heart)
+            heart->drawSprite();
     }
     // if game over
     if(spriteUsr->get_blood() <= 0) {
@@ -135,7 +160,7 @@ void create_low(sprite_low ** low) {
     *low = new sprite_low(x, y, &low_img, PIC_SIZE, PIC_SIZE, mov_x, mov_y);
 }
 
-void create_bomb(sprite_bomb ** bomb) {
+void create_blood(sprite_blood **pSpriteBlood, ACL_Image *p_img, int blood) {
     int x, y;
     switch (rand() % 4) {
         case 0: // up
@@ -159,10 +184,10 @@ void create_bomb(sprite_bomb ** bomb) {
     int mov_x = 0;
     int mov_y = 0;
     while (mov_x == 0 && mov_y == 0) {
-        mov_x = (rand() % 3 - 1) * BOMB_SPEED_EVERY_LEVEL;
-        mov_y = (rand() % 3 - 1) * BOMB_SPEED_EVERY_LEVEL;
+        mov_x = (rand() % 3 - 1) * SPEED_EVERY_LEVEL;
+        mov_y = (rand() % 3 - 1) * SPEED_EVERY_LEVEL;
     }
     mov_x *= level;
     mov_y *= level;
-    *bomb = new sprite_bomb(x, y, &bomb_img, PIC_SIZE, PIC_SIZE, mov_x, mov_y);
+    *pSpriteBlood = new sprite_blood(x, y, p_img, PIC_SIZE, PIC_SIZE, mov_x, mov_y, blood);
 }
