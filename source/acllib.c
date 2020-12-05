@@ -35,7 +35,7 @@
 #undef UNICODE
 #endif
 
-#include "acllib.h"
+#include "../include/acllib.h"
 
 #include <windows.h>
 #include <olectl.h>
@@ -82,7 +82,7 @@ ACL_Color g_brushColor = BLACK;
 int g_brushStyle = BRUSH_STYLE_SOLID;
 
 HFONT g_font = NULL;
-char g_fontName[256] = "ËÎÌå";
+char g_fontName[256] = "ï¿½ï¿½ï¿½ï¿½";
 int g_textSize = 12;
 ACL_Color g_textColor = BLACK;
 ACL_Color g_textBkColor = WHITE;

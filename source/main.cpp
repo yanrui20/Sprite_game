@@ -1,9 +1,9 @@
 #include <iostream>
-#include "global.h"
+#include "../include/global.h"
 #include <ctime>
-#include "sprite_low.h"
-#include "sprite_usr.h"
-#include "sprite_blood.h"
+#include "../include/sprite_low.h"
+#include "../include/sprite_usr.h"
+#include "../include/sprite_blood.h"
 
 void timerEvent(int id);
 void keyboardEvent(int key, int event);
@@ -13,7 +13,7 @@ void create_usr();
 void create_low(sprite_low ** low);
 void create_blood(sprite_blood **pSpriteBlood, ACL_Image *p_img, int blood);
 
-ACL_Image usr_img, low_img, bomb_img, game_over_img, heart_img;
+ACL_Image usr_img, low_img, bomb_img, game_over_img, heart_img, background_img;
 const int MAX_LOW = 20;
 sprite_low * spriteLow[MAX_LOW] = {nullptr};
 sprite_usr * spriteUsr = nullptr;
@@ -21,6 +21,8 @@ sprite_blood * spriteBomb[MAX_BOMB] = {nullptr};
 sprite_blood * spriteHeart[MAX_HEART] = {nullptr};
 bool game_over = false;
 int level = 1;
+int direct_x = 0, direct_y = 0;
+int usr_speed = USR_START_SPEED;
 
 int Setup() {
     initWindow("Sprite Game", 350, 100, WINDOW_WIDTH, WINDOW_HEIGHT);
@@ -29,6 +31,7 @@ int Setup() {
     loadImage("../picture/bomb.jpg", &bomb_img);
     loadImage("../picture/GAME_OVER.jpg", &game_over_img);
     loadImage("../picture/heart.jpg", &heart_img);
+    loadImage("../picture/background.jpg", &background_img);
     srand(time(nullptr));
     create_usr();
     registerTimerEvent(timerEvent);
@@ -41,6 +44,7 @@ int Setup() {
 void timerEvent(int id){
     if (game_over) return;
     level = spriteUsr->get_score() / 50 + 1;
+    spriteUsr->auto_move();
     eat();
     for(auto & low : spriteLow) {
         if(low) low->auto_move();
@@ -72,9 +76,65 @@ void timerEvent(int id){
 }
 
 void keyboardEvent(int key, int event) {
-    if(event != KEY_DOWN) return;
-
-    spriteUsr->move(key);
+    if(event != KEY_DOWN && event != KEY_UP) return;
+    if (event == KEY_DOWN) {
+        switch(key) {
+            case VK_UP:
+                direct_y--;
+                break;
+            case VK_DOWN:
+                direct_y++;
+                break;
+            case VK_LEFT:
+                direct_x--;
+                break;
+            case VK_RIGHT:
+                direct_x++;
+                break;
+            case 'W':
+                usr_speed++;
+                if (usr_speed > USR_MAX_SPEED)  {
+                    usr_speed = USR_MAX_SPEED;
+                }
+                break;
+            case 'S':
+                usr_speed--;
+                if (usr_speed < USR_MIN_SPEED)  {
+                    usr_speed = USR_MIN_SPEED;
+                }
+                break;
+            default:
+                break;
+        }
+    } else {
+        switch(key) {
+            case VK_UP:
+                direct_y++;
+                break;
+            case VK_DOWN:
+                direct_y--;
+                break;
+            case VK_LEFT:
+                direct_x++;
+                break;
+            case VK_RIGHT:
+                direct_x--;
+                break;
+            default:
+                break;
+        }
+    }
+    if (direct_x > 1) {
+        direct_x = 1;
+    }else if (direct_x < -1) {
+        direct_x = -1;
+    }
+    if (direct_y > 1) {
+        direct_y = 1;
+    }else if (direct_y < -1) {
+        direct_y = -1;
+    }
+    spriteUsr->change_mov(direct_x * usr_speed, direct_y * usr_speed);
 }
 
 void eat() {
@@ -106,21 +166,26 @@ void eat() {
 void print() {
     beginPaint();
     clearDevice();
+    // background
+    putImageScale(&background_img, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
     // print usr
-    spriteUsr->drawSprite();
+    spriteUsr->drawSprite(RGB(255, 255, 255));
     // print low
     for (auto & low : spriteLow) {
-        if (low)
-            low->drawSprite();
+        if (low) {
+            low->drawSprite(RGB(255, 255, 255));
+        }
     }
     // print bomb
     for (auto & bomb : spriteBomb) {
-        if (bomb)
-            bomb->drawSprite();
+        if (bomb) {
+            bomb->drawSprite(RGB(246, 246, 246));
+        }
     }
     for (auto & heart : spriteHeart) {
-        if (heart)
-            heart->drawSprite();
+        if (heart) {
+            heart->drawSprite(RGB(255, 255, 255));
+        }
     }
     // if game over
     if(spriteUsr->get_blood() <= 0) {
@@ -128,24 +193,27 @@ void print() {
         putImageScale(&game_over_img, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
     }
     // print score, blood, level
-    char score_txt[20], blood_txt[20], level_txt[20];
+    char score_txt[20], blood_txt[20], level_txt[20], speed_txt[20];
     sprintf_s(score_txt, "Score: %d", spriteUsr->get_score());
     sprintf_s(blood_txt, "Blood: %d", spriteUsr->get_blood());
     sprintf_s(level_txt, "Level: %d", level);
-    setTextSize(25);
+    sprintf_s(speed_txt, "Your Speed: %d", usr_speed);
+    setTextSize(TEXT_SIZE);
     setTextColor(BLUE);
     paintText(0, 0, score_txt);
     setTextColor(RED);
     paintText(500, 0, blood_txt);
     setTextColor(GREEN);
     paintText(1050, 0, level_txt);
+    setTextColor(BLACK);
+    paintText(500, WINDOW_HEIGHT - TEXT_SIZE, speed_txt);
     endPaint();
 }
 
 void create_usr() {
     int x = WINDOW_WIDTH / 2;
     int y = WINDOW_HEIGHT / 2;
-    spriteUsr = new sprite_usr(x, y, &usr_img, PIC_SIZE, PIC_SIZE, USR_SPEED, USR_SPEED);
+    spriteUsr = new sprite_usr(x, y, &usr_img, PIC_SIZE, PIC_SIZE, 0, 0);
 }
 
 void create_low(sprite_low ** low) {

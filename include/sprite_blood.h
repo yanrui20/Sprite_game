@@ -4,7 +4,7 @@
 
 #ifndef SPRITE_GAME_SPRITE_BLOOD_H
 #define SPRITE_GAME_SPRITE_BLOOD_H
-#include "sprite_base.h"
+#include "../include/sprite_base.h"
 
 class sprite_blood : public sprite_base {
 private:

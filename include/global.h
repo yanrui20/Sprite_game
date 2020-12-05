@@ -1,17 +1,21 @@
 #ifndef SPRITE_GAME_GLOBAL_H
 #define SPRITE_GAME_GLOBAL_H
-#include "acllib.h"
+#include "../include/acllib.h"
 
 // window
 const int WINDOW_WIDTH = 1200;
 const int WINDOW_HEIGHT = 900;
+// text
+const int TEXT_SIZE = 25;
 // picture
 const int PIC_SIZE = 50;
 // low
 const int LOW_SCORE = 1;
 const int LOW_SPEED = 2;
 // usr
-const int USR_SPEED = 40;
+const int USR_START_SPEED = 10;
+const int USR_MAX_SPEED = 30;
+const int USR_MIN_SPEED = 5;
 const int USR_BLOOD = 10;
 // blood
 const int SPEED_EVERY_LEVEL = 5;

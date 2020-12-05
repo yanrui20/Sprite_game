@@ -1,4 +1,4 @@
-#include "sprite_low.h"
+#include "../include/sprite_low.h"
 
 sprite_low::sprite_low(int p_x, int p_y, ACL_Image *p_img, \
                         int width, int height, int mov_x, int mov_y)

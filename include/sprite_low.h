@@ -1,7 +1,7 @@
 #ifndef SPRITE_GAME_SPRITE_LOW_H
 #define SPRITE_GAME_SPRITE_LOW_H
 
-#include "sprite_base.h"
+#include "../include/sprite_base.h"
 
 class sprite_low
         : public sprite_base {
