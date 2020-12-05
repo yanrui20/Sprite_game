@@ -1,10 +1,9 @@
 #include "../include/sprite_score.h"
 
-sprite_score::sprite_score(int p_x, int p_y, ACL_Image *p_img, \
-                        int width, int height, int mov_x, int mov_y)
+sprite_score::sprite_score(int p_x, int p_y, ACL_Image *p_img, int width, int height, int mov_x, int mov_y, int score)
     : sprite_base(p_x, p_y, p_img, width, height, mov_x, mov_y)
 {
-    score = LOW_SCORE;
+    this->score = score;
 }
 
 sprite_score::~sprite_score() = default;
@@ -14,7 +13,7 @@ void sprite_score::auto_move() {
     pos_y += mov_y;
 }
 
-int sprite_score::get_special_value() {
+int sprite_score::get_score() {
     return score;
 }
 

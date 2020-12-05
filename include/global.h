@@ -10,9 +10,14 @@ const int TEXT_SIZE = 25;
 // picture
 const int PIC_SIZE = 50;
 // score
-const int MAX_SPRITE_SCORE = 20;
-const int LOW_SCORE = 1;
-const int SCORE_SPEED = 2;
+    // up
+    const int MAX_SPRITE_SCORE_UP = 20;
+    const int SCORE_UP_SCORE = 1;
+    const int SCORE_UP_SPEED = 2;
+    // down
+    const int MAX_SPRITE_SCORE_DOWN = 5;
+    const int SCORE_DOWN_SCORE = -5;
+    const int SCORE_DOWN_SPEED = 10;
 // usr
 const int USR_START_SPEED = 10;
 const int USR_MAX_SPEED = 30;

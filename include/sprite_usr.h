@@ -10,10 +10,10 @@ public:
     sprite_usr(int p_x, int p_y, ACL_Image *p_img, int width, int height, int mov_x, int mov_y);
     ~sprite_usr() override;
     void auto_move() override;
-    int get_special_value() override;
+    int get_score();
     void add_score(int add);
     int get_blood() const;
-    void add_blood(int a);
+    void add_blood(int add);
     void change_mov(int mov_x, int mov_y);
 };
 

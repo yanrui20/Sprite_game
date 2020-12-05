@@ -16,7 +16,7 @@ void sprite_blood::auto_move() {
     pos_y += mov_y;
 }
 
-int sprite_blood::get_special_value() {
+int sprite_blood::get_blood() {
     return this->blood;
 }
 

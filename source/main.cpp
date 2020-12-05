@@ -10,12 +10,12 @@ void keyboardEvent(int key, int event);
 void eat();
 void print();
 void create_usr();
-void create_Score(sprite_score ** Score);
+void create_score(sprite_score **Score, ACL_Image *p_img, int score);
 void create_blood(sprite_blood **pSpriteBlood, ACL_Image *p_img, int blood);
 void restart();
 
 ACL_Image usr_img, score_img, bomb_img, game_over_img, heart_img, background_img;
-sprite_score * spriteScore[MAX_SPRITE_SCORE] = {nullptr};
+sprite_score * spriteScore[MAX_SPRITE_SCORE_UP] = {nullptr};
 sprite_usr * spriteUsr = nullptr;
 sprite_blood * spriteBomb[MAX_BOMB] = {nullptr};
 sprite_blood * spriteHeart[MAX_HEART] = {nullptr};
@@ -42,12 +42,12 @@ int Setup() {
 
 void timerEvent(int id){
     if (game_over) return;
-    level = spriteUsr->get_special_value() / 50 + 1;
+    level = spriteUsr->get_score() / 50 + 1;
     spriteUsr->auto_move();
     eat();
     for(auto & score : spriteScore) {
         if(score) score->auto_move();
-        else create_Score(&score);
+        else create_score(&score, &score_img, SCORE_UP_SCORE);
         if (!(score->is_inBox())) {
             delete score;
             score = nullptr;
@@ -144,14 +144,14 @@ void keyboardEvent(int key, int event) {
 void eat() {
     for (auto & score : spriteScore) {
         if (score && score->touch(spriteUsr)) {
-            spriteUsr->add_score(score->get_special_value());
+            spriteUsr->add_score(score->get_score());
             delete score;
             score = nullptr;
         }
     }
     for (auto & bomb : spriteBomb) {
         if (bomb && bomb->touch(spriteUsr)) {
-            spriteUsr->add_blood(bomb->get_special_value());
+            spriteUsr->add_blood(bomb->get_blood());
             delete bomb;
             bomb = nullptr;
         }
@@ -159,7 +159,7 @@ void eat() {
     for (auto & heart : spriteHeart) {
         if (heart && heart->touch(spriteUsr)) {
             if (spriteUsr->get_blood() < USR_BLOOD) {
-                spriteUsr->add_blood(heart->get_special_value());
+                spriteUsr->add_blood(heart->get_blood());
             }
             delete heart;
             heart = nullptr;
@@ -198,7 +198,7 @@ void print() {
     }
     // print score, blood, level
     char score_txt[20], blood_txt[20], level_txt[20], speed_txt[20], hint_txt[100];
-    sprintf_s(score_txt, "Score: %d", spriteUsr->get_special_value());
+    sprintf_s(score_txt, "Score: %d", spriteUsr->get_score());
     sprintf_s(blood_txt, "Blood: %d", spriteUsr->get_blood());
     sprintf_s(level_txt, "Level: %d", level);
     sprintf_s(speed_txt, "Your Speed: %d", usr_speed);
@@ -223,16 +223,16 @@ void create_usr() {
     spriteUsr = new sprite_usr(x, y, &usr_img, PIC_SIZE, PIC_SIZE, 0, 0);
 }
 
-void create_Score(sprite_score ** Score) {
+void create_score(sprite_score **Score, ACL_Image *p_img, int score) {
     int x = rand() % (WINDOW_WIDTH - PIC_SIZE);
     int y = rand() % (WINDOW_HEIGHT - PIC_SIZE);
     int mov_x = 0;
     int mov_y = 0;
     while (mov_x == 0 && mov_y == 0) {
-        mov_x = (rand() % 3 - 1) * SCORE_SPEED;
-        mov_y = (rand() % 3 - 1) * SCORE_SPEED;
+        mov_x = (rand() % 3 - 1) * SCORE_UP_SPEED;
+        mov_y = (rand() % 3 - 1) * SCORE_UP_SPEED;
     }
-    *Score = new sprite_score(x, y, &score_img, PIC_SIZE, PIC_SIZE, mov_x, mov_y);
+    *Score = new sprite_score(x, y, p_img, PIC_SIZE, PIC_SIZE, mov_x, mov_y, score);
 }
 
 void create_blood(sprite_blood **pSpriteBlood, ACL_Image *p_img, int blood) {

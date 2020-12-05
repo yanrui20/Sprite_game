@@ -25,7 +25,7 @@ void sprite_usr::auto_move() {
     }
 }
 
-int sprite_usr::get_special_value() {
+int sprite_usr::get_score() {
     return score;
 }
 
@@ -37,8 +37,8 @@ int sprite_usr::get_blood() const {
     return blood;
 }
 
-void sprite_usr::add_blood(int a) {
-    this->blood += a;
+void sprite_usr::add_blood(int add) {
+    this->blood += add;
 }
 
 void sprite_usr::change_mov(int mov_x, int mov_y) {

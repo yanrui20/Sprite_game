@@ -16,7 +16,6 @@ public:
     void drawSprite(ACL_Color trans_color);
     int get_pos_x() const;
     int get_pos_y() const;
-    virtual int get_special_value() = 0;
     bool is_inBox() const;
     bool touch(const sprite_base *sprite) const;
 };
