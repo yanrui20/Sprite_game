@@ -12,9 +12,9 @@ void print();
 void create_usr();
 void create_low(sprite_low ** low);
 void create_blood(sprite_blood **pSpriteBlood, ACL_Image *p_img, int blood);
+void restart();
 
 ACL_Image usr_img, low_img, bomb_img, game_over_img, heart_img, background_img;
-const int MAX_LOW = 20;
 sprite_low * spriteLow[MAX_LOW] = {nullptr};
 sprite_usr * spriteUsr = nullptr;
 sprite_blood * spriteBomb[MAX_BOMB] = {nullptr};
@@ -36,7 +36,6 @@ int Setup() {
     create_usr();
     registerTimerEvent(timerEvent);
     registerKeyboardEvent(keyboardEvent);
-    putImage(&usr_img, 50, 50);
     startTimer(0, 20);
     return 0;
 }
@@ -102,6 +101,11 @@ void keyboardEvent(int key, int event) {
                 if (usr_speed < USR_MIN_SPEED)  {
                     usr_speed = USR_MIN_SPEED;
                 }
+                break;
+            case VK_ESCAPE:
+                exit(0);
+            case 'R':
+                restart();
                 break;
             default:
                 break;
@@ -193,11 +197,12 @@ void print() {
         putImageScale(&game_over_img, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
     }
     // print score, blood, level
-    char score_txt[20], blood_txt[20], level_txt[20], speed_txt[20];
+    char score_txt[20], blood_txt[20], level_txt[20], speed_txt[20], hint_txt[100];
     sprintf_s(score_txt, "Score: %d", spriteUsr->get_score());
     sprintf_s(blood_txt, "Blood: %d", spriteUsr->get_blood());
     sprintf_s(level_txt, "Level: %d", level);
     sprintf_s(speed_txt, "Your Speed: %d", usr_speed);
+    sprintf_s(hint_txt, "ESC:Quit  R:Restart  W:SpeedUp  S:SpeedDown");
     setTextSize(TEXT_SIZE);
     setTextColor(BLUE);
     paintText(0, 0, score_txt);
@@ -206,7 +211,9 @@ void print() {
     setTextColor(GREEN);
     paintText(1050, 0, level_txt);
     setTextColor(BLACK);
-    paintText(500, WINDOW_HEIGHT - TEXT_SIZE, speed_txt);
+    paintText(500, WINDOW_HEIGHT - 2 * TEXT_SIZE, speed_txt);
+    setTextColor(BLACK);
+    paintText(335, WINDOW_HEIGHT - TEXT_SIZE, hint_txt);
     endPaint();
 }
 
@@ -258,4 +265,26 @@ void create_blood(sprite_blood **pSpriteBlood, ACL_Image *p_img, int blood) {
     mov_x *= level;
     mov_y *= level;
     *pSpriteBlood = new sprite_blood(x, y, p_img, PIC_SIZE, PIC_SIZE, mov_x, mov_y, blood);
+}
+
+void restart() {
+    for(auto & low : spriteLow) {
+        delete low;
+        low = nullptr;
+    }
+    for(auto & bomb : spriteBomb) {
+        delete bomb;
+        bomb = nullptr;
+    }
+    for(auto & heart : spriteHeart) {
+        delete heart;
+        heart = nullptr;
+    }
+    delete spriteUsr;
+    create_usr();
+    game_over = false;
+    level = 1;
+    direct_x = 0;
+    direct_y = 0;
+    usr_speed = USR_START_SPEED;
 }

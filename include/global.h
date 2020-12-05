@@ -10,6 +10,7 @@ const int TEXT_SIZE = 25;
 // picture
 const int PIC_SIZE = 50;
 // low
+const int MAX_LOW = 20;
 const int LOW_SCORE = 1;
 const int LOW_SPEED = 2;
 // usr
