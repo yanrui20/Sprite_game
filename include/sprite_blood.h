@@ -13,7 +13,7 @@ public:
     sprite_blood(int p_x, int p_y, ACL_Image *p_img, int width, int height, int mov_x, int mov_y, int blood);
     ~sprite_blood() override;
     void auto_move() override;
-    int get_score() override;
+    int get_special_value() override;
 };
 
 

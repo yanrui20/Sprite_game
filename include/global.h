@@ -9,10 +9,10 @@ const int WINDOW_HEIGHT = 900;
 const int TEXT_SIZE = 25;
 // picture
 const int PIC_SIZE = 50;
-// low
-const int MAX_LOW = 20;
+// score
+const int MAX_SPRITE_SCORE = 20;
 const int LOW_SCORE = 1;
-const int LOW_SPEED = 2;
+const int SCORE_SPEED = 2;
 // usr
 const int USR_START_SPEED = 10;
 const int USR_MAX_SPEED = 30;
