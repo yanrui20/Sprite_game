@@ -25,7 +25,7 @@ void sprite_usr::auto_move() {
     }
 }
 
-int sprite_usr::get_score() {
+int sprite_usr::get_score() const {
     return score;
 }
 

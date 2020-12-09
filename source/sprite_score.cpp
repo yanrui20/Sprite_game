@@ -13,7 +13,7 @@ void sprite_score::auto_move() {
     pos_y += mov_y;
 }
 
-int sprite_score::get_score() {
+int sprite_score::get_score() const {
     return score;
 }
 
